@@ -1,22 +1,7 @@
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
-import uvicorn
-import os
 
 app = FastAPI()
-
-# Root endpoint
-@app.get("/")
-def read_root():
-    return {
-        "message": "Welcome to FastAPI User Management API",
-        "endpoints": {
-            "POST /users/": "Create a new user",
-            "GET /users/{user_id}": "Get user by ID",
-            "PUT /users/{user_id}": "Update user",
-            "DELETE /users/{user_id}": "Delete user"
-        }
-    }
 
 # Simple in-memory database
 users_db = {}
@@ -63,8 +48,3 @@ def delete_user(user_id: int):
         raise HTTPException(status_code=404, detail="User not found")
     del users_db[user_id]
     return {"message": "User deleted successfully"}
-
-# Run the application
-if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 8000))
-    uvicorn.run(app, host="0.0.0.0", port=port)
